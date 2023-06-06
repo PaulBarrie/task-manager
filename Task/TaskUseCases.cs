@@ -1,3 +1,4 @@
+namespace task_manager.Task;
 
 public interface ITaskUseCases
 {

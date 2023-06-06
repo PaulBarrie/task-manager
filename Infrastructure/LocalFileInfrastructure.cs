@@ -1,12 +1,12 @@
+namespace task_manager;
 
-
-public interface LocalFileInfrastructure<T, TO>
+public interface ILocalFileInfrastructure<in T, TO>
 {
     void Write(TO content, T filename);
     TO Read(T filename);  
 }
 
-public class LocalFileInfrastructure : LocalFileInfrastructure<String, String>
+public class LocalFileInfrastructure : ILocalFileInfrastructure<String, String>
 {
     public String Read(String filename)
     {
@@ -22,6 +22,4 @@ public class LocalFileInfrastructure : LocalFileInfrastructure<String, String>
         var sw = new StreamWriter(fs);
         sw.Write(content);
     }
-
-    
 }

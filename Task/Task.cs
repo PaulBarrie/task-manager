@@ -1,10 +1,10 @@
-namespace taskmanager;
+namespace task_manager.Task;
 
 public class Task {
 
-    private static TaskState DEFAULT_STATUS = TaskState.todo;
+    private static TaskState DEFAULT_STATUS = TaskState.Todo;
 
-    public string id {get;}
+    public Id Id {get; set; }
     public readonly DateTimeOffset Created;
     public DateTimeOffset? DueDate { get; set; }
     public string Description { get; set; }
@@ -19,15 +19,15 @@ public class Task {
     }
 
     public Task(string description) {
-        this.id = GenerateRandomId();
-        this.Description = description;
-        this.Created = DateTimeOffset.Now;
-        this.State = DEFAULT_STATUS;
+        Id = new Id();
+        Description = description;
+        Created = DateTimeOffset.Now;
+        State = DEFAULT_STATUS;
         SubTasks = new List<Task>();
     }
 
 }
 
 public enum TaskState {
-todo, pending, progress, done, cancelled, closed
+Todo, Pending, Progress, Done, Cancelled, Closed
 }

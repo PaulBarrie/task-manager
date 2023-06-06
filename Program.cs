@@ -1,8 +1,7 @@
-namespace taskmanager;
+namespace task_manager;
 
-
-class Program {
-    public static void main(string[] args) {
-        
+static class Program {
+    public static void Main(string[] args) {
+        Console.Write("TODO");
     }
 }

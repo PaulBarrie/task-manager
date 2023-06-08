@@ -8,7 +8,7 @@ public interface ITaskRepository
     List<Task> FindAll(SearchFilter filter);
     void Add(Task task);
     void Remove(Id idTask);
-    void Update(Id idTask, TaskState newState);
+    Task Update(Id idTask, TaskState newState);
 
 }
 
@@ -71,7 +71,7 @@ public class JsonFsTaskRepository : ITaskRepository {
         _storeTasks(newTasks.ToList());
     }
 
-    public void Update(Id idTask, TaskState newState)
+    public Task Update(Id idTask, TaskState newState)
     {
         var tasks = _getStoredTasks();
         foreach (var t in tasks)
@@ -79,7 +79,7 @@ public class JsonFsTaskRepository : ITaskRepository {
             if (t.Id.Get() != idTask.Get()) continue;
             t.State = newState;
             _storeTasks(tasks);
-            return;
+            return t; 
         }
         throw new TaskNotFoundException($"Task with id {idTask.Get()} not found");
     }

@@ -2,10 +2,10 @@ namespace task_manager.Task;
 
 public interface ITaskUseCases
 {
-    Task AddTask(Task task);
+    void AddTask(Task task);
     Task AddSubTask(Task task, Task subTask);
-    Task UpdateTask(Task task);
-    Task RemoveTask(Task task);
+    Task UpdateTask(Id idTask, TaskState newState);
+    void RemoveTask(Task task);
     List<Task> ListTasks(TaskStatus? status = null);
 }
 
@@ -25,24 +25,23 @@ public class TaskUseCases : ITaskUseCases
         throw new NotImplementedException();
     }
 
-    public Task AddTask(Task task)
+    public void AddTask(Task task)
     {
-        
-        throw new NotImplementedException();
+        _taskRepository.Add(task);
     }
 
     public List<Task> ListTasks(TaskStatus? status = null)
     {
-        throw new NotImplementedException();
+        return _taskRepository.FindAll(new SearchFilter((TaskState)status));
     }
 
-    public Task RemoveTask(Task task)
+    public void RemoveTask(Task task)
     {
-        throw new NotImplementedException();
+        _taskRepository.Remove(task.Id);
     }
 
-    public Task UpdateTask(Task task)
+    public Task UpdateTask(Id idTask, TaskState newState)
     {
-        throw new NotImplementedException();
+        return _taskRepository.Update(idTask, newState);
     }
 }

@@ -1,0 +1,32 @@
+[
+  {
+    "Id": "3",
+    "Created": "2022-02-13T22:14:30.536023+01:00",
+    "DueDate": "2022-02-16T21:14:30.536024+01:00",
+    "CloseDate": null,
+    "Description": "make a design of my needs to manage my tasks",
+    "State": 2,
+    "Tag": null,
+    "SubTasks": null
+  },
+  {
+    "Id": "4",
+    "Created": "2022-02-16T22:14:30.536024+01:00",
+    "DueDate": "2022-03-16T22:14:30.536025+01:00",
+    "CloseDate": null,
+    "Description": "get first feedback on my app with peers",
+    "State": 0,
+    "Tag": null,
+    "SubTasks": null
+  },
+  {
+    "Id": "5",
+    "Created": "2022-01-16T22:14:30.536143+01:00",
+    "DueDate": "2022-02-01T22:14:30.536144+01:00",
+    "CloseDate": "2022-02-11T22:14:30.536144+01:00",
+    "Description": "brainstorm on what project to work on",
+    "State": 5,
+    "Tag": null,
+    "SubTasks": null
+  }
+]

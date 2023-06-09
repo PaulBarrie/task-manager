@@ -1,25 +1,36 @@
-namespace task_manager;
+namespace TaskManager;
 
-public interface ILocalFileInfrastructure<in T, TO>
+public interface ILocalFileInfrastructure<TO>
 {
-    void Write(TO content, T filename);
-    TO Read(T filename);  
+    void Write(TO content);
+    TO Read();  
 }
 
-public class LocalFileInfrastructure : ILocalFileInfrastructure<String, String>
+public class LocalFileInfrastructure : ILocalFileInfrastructure<String>
 {
-    public String Read(String filename)
+
+    private readonly String filename;
+
+    public LocalFileInfrastructure(string filename)
+    {
+        this.filename = filename;
+    }
+
+    public String Read()
     {
         if (!File.Exists(filename)) {
             throw new FileNotFoundException($"File {filename} not found");
         }
-        return File.ReadAllText(filename);
+        var file = File.ReadAllText(filename);
+        return file;
     }
 
-    public void Write(String content, String filename)
+    public void Write(String content)
     {
-        FileStream fs = File.Open(filename, FileMode.OpenOrCreate);
-        var sw = new StreamWriter(fs);
-        sw.Write(content);
+        using (FileStream fs = File.Open(filename, FileMode.OpenOrCreate))
+        {
+            var sw = new StreamWriter(fs);
+            sw.Write(content);
+        }
     }
 }

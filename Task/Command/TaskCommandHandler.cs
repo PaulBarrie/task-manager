@@ -10,6 +10,13 @@ public class TaskCommandHandler :
     ICommandHandler<UpdateStatusCommand>, 
     ICommandHandler<DeleteCommand>
 {
+    private readonly ITaskRepository _taskRepository;
+
+    public TaskCommandHandler(ITaskRepository taskRepository)
+    {
+        _taskRepository = taskRepository;
+    }
+
     public void Handle(CreateCommand command)
     {
         throw new NotImplementedException();

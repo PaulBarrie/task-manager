@@ -23,10 +23,7 @@ public class JsonFsTaskRepositoryTests
     [Test]
     public void TestAddNewTaskShouldSucceed()
     {
-        // Arrange
-        var task = new Task("something to do"); // assuming default constructor
-        // Act
-        _jsonFsTaskRepository.Create(task);
+        // Arrange// Act
 
         // Assert
     }

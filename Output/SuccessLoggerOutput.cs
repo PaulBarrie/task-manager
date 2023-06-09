@@ -2,13 +2,13 @@ using TaskManager.Infrastructure;
 
 namespace TaskManager.Output;
 
-public class SuccessLoggerOutputPort : IOutputPort<string[]>
+public class SuccessLoggerOutput : IOutputPort<string[]>
 {
     
     private readonly LocalFileInfrastructure _localFileInfrastructure;
     private readonly Datetime _timer = new(null);
 
-    public SuccessLoggerOutputPort(LocalFileInfrastructure localFileInfrastructure)
+    public SuccessLoggerOutput(LocalFileInfrastructure localFileInfrastructure)
     {
         _localFileInfrastructure = localFileInfrastructure;
     }

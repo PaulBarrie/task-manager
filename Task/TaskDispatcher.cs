@@ -13,14 +13,8 @@ public class TaskDispatcher
 
     public void Dispatch(object commandQuery)
     {
-        if (commandQuery is ICommand command)
-        {
-            Dispatch(command);
-        }
-        else if (commandQuery is IQuery query)
-        {
-            Dispatch(query);
-        }
+        dynamic specificCommandQuery = commandQuery;
+        Dispatch(specificCommandQuery);
     }
 
     private void Dispatch(ICommand command)

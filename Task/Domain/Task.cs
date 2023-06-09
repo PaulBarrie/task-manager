@@ -12,7 +12,8 @@ public class Task {
     public List<Task> SubTasks { get; set; }
     
 
-    public Task(string description) {
+    public Task(string description)
+    {
         Id = new Id();
         Description = description;
         Created = DateTimeOffset.Now;
@@ -20,6 +21,15 @@ public class Task {
         SubTasks = new List<Task>();
     }
 
+    public Task(string description, String dueDate) {
+        Id = new Id();
+        Description = description;
+        Created = DateTimeOffset.Now;
+        DueDate = DateTimeOffset.Parse(dueDate);
+        State = DEFAULT_STATUS;
+        SubTasks = new List<Task>();
+    }
+    
     public Task(Id id, String description, DateTimeOffset created, DateTimeOffset? dueDate, TaskState taskState, List<Task> subTasks)
     {
         Id = id;

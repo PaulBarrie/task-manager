@@ -16,12 +16,15 @@ public class TaskCommandHandler : ICommandHandler<AddTaskCommand>, ICommandHandl
 
     public void Handle(AddTaskCommand command)
     {
-        throw new NotImplementedException();
+        var task = command.DueDate is null ? new Task(command.Description) : new Task(command.Description, command.DueDate);
+        _taskRepository.Create(task);
+        command.Id = task.Id;
     }
 
     public void Handle(UpdateTaskStatusCommand command)
     {
-        throw new NotImplementedException();
+        var task = _taskRepository.Update(command.Id, command.Status);
+        
     }
 
     public void Handle(DeleteTaskCommand taskCommand)

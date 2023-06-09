@@ -19,7 +19,8 @@ static class Program {
             var commandQuery = InputParser.Parse(args);
             _taskDispatcher.Dispatch(commandQuery);
             _outputPorts.SuccessLoggerOutput.Render(args);
-            _outputPorts.SuccessStandardOutput.Render(commandQuery);   
+            _outputPorts.SuccessStandardOutput.Render(commandQuery);
+                
         }
         catch (Exception e)
         {

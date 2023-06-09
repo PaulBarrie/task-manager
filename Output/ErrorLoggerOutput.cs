@@ -2,14 +2,14 @@ using TaskManager.Infrastructure;
 
 namespace TaskManager.Output;
 
-public class ErrorLoggerOutputPort : IOutputPort<ErrorOutput>
+public class ErrorLoggerOutput : IOutputPort<ErrorOutput>
 {
     
     private readonly LocalFileInfrastructure _localFileInfrastructure;
     private readonly Datetime _timer = new(null);
 
 
-    public ErrorLoggerOutputPort(LocalFileInfrastructure localFileInfrastructure)
+    public ErrorLoggerOutput(LocalFileInfrastructure localFileInfrastructure)
     {
         _localFileInfrastructure = localFileInfrastructure;
     }

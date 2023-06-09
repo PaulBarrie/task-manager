@@ -7,13 +7,12 @@ public interface ICommand
 
 public class AddTaskCommand : ICommand
 {
-    public Id Id { get; }
+    public Id Id { get; set; }
     public readonly String Description;
     public readonly String? DueDate;
 
     public AddTaskCommand(String description, String? dueDate)
     {
-        Id = new Id();
         Description = description;
         DueDate = dueDate;
     }

@@ -10,16 +10,16 @@ public interface IOutputPort<in T>
 
 public class OutputPorts
 {
-    public ErrorLoggerOutputPort ErrorLoggerOutput { get; }
-    public SuccessLoggerOutputPort SuccessLoggerOutput { get; }
+    public ErrorLoggerOutput ErrorLoggerOutput { get; }
+    public SuccessLoggerOutput SuccessLoggerOutput { get; }
     public ErrorStandardOutput ErrorStandardOutput { get; }
     public SuccessStandardOutput SuccessStandardOutput { get; }
     
     public OutputPorts(String fileLog)
     {
         var localFileInfrastructure = new LocalFileInfrastructure(fileLog);
-        ErrorLoggerOutput = new ErrorLoggerOutputPort(localFileInfrastructure);
-        SuccessLoggerOutput = new SuccessLoggerOutputPort(localFileInfrastructure);
+        ErrorLoggerOutput = new ErrorLoggerOutput(localFileInfrastructure);
+        SuccessLoggerOutput = new SuccessLoggerOutput(localFileInfrastructure);
         ErrorStandardOutput = new ErrorStandardOutput();
         SuccessStandardOutput = new SuccessStandardOutput();
     }

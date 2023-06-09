@@ -2,63 +2,42 @@ using TaskManager.Task;
 
 namespace TaskManager.Output;
 
-
-/*
-public class SuccessStandardOutput : IOutputPort<Task.Task>, IOutputPort<List<Task.Task>>, IOutputPort<String>
-{
-    public void Render(Task.Task output)
-    {
-        renderTask(output);
-    }
-
-    public void Render(List<Task.Task> output)
-    {
-        
-    }
-
-    public void Render(string output)
-    {
-        Console.WriteLine(output);
-    }
-
-    
-}
-*/
-
 public class SuccessStandardOutput :
-    IOutputPort<ICommand>,
     IOutputPort<IQuery>,
-    IOutputPort<AddTaskCommand>,
-    IOutputPort<UpdateTaskStatusCommand>,
-    IOutputPort<DeleteTaskCommand>,
-    IOutputPort<GetTaskByIdQuery>,
-    IOutputPort<ListTasksByStatusQuery>,
-    IOutputPort<ListAllTasksOrderedByDueDateQuery>
+    IOutputPort<ICommand>
 {
-    public void Render(ICommand output)
-    {
-        switch (typeof(Output))
-        {
-            AddTaskCommand
-        }
-    }
 
-    public void Render(IQuery output)
+    public void Render(object commandQuery)
     {
-        throw new NotImplementedException();
+        if (commandQuery is IQuery query)
+           Render(query);
+        else if (commandQuery is ICommand command)
+            Render(command);
     }
-    public void Render(AddTaskCommand output)
+    public void Render(ICommand command)
+    {
+        dynamic specificCommand = command;
+        Render(specificCommand);
+    }
+    
+    public void Render(IQuery query)
+    {
+        dynamic specificQuery = query;
+        Render(specificQuery);
+    }
+    
+    private void Render(AddTaskCommand output)
     {
         Console.WriteLine($"Task with Id {output.Id} successfully added");
         
     }
 
-    public void Render(UpdateTaskStatusCommand output)
+    private void Render(UpdateTaskStatusCommand output)
     {
         Console.WriteLine($"Task with id {output.Id} successfully updated");
     }
 
-    public void Render(DeleteTaskCommand output)
+    private void Render(DeleteTaskCommand output)
     {
         Console.WriteLine($"Task with id {output.Id} successfully deleted");
     }
@@ -68,7 +47,7 @@ public class SuccessStandardOutput :
         renderTask(output.Result!);
     }
 
-    public void Render(ListTasksByStatusQuery output)
+    private void Render(ListTasksByStatusQuery output)
     {
         foreach (var task in output.Results)
         {
@@ -77,7 +56,7 @@ public class SuccessStandardOutput :
         }
     }
 
-    public void Render(ListAllTasksOrderedByDueDateQuery output)
+    private void Render(ListAllTasksOrderedByDueDateQuery output)
     {
         foreach (var task in output.Results)
         {

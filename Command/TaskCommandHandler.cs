@@ -5,10 +5,7 @@ public interface ICommandHandler<in T> where T : class, ICommand
     void Handle(T command);
 }
 
-public class TaskCommandHandler :  
-    ICommandHandler<CreateCommand>, 
-    ICommandHandler<UpdateStatusCommand>, 
-    ICommandHandler<DeleteCommand>
+public class TaskCommandHandler : ICommandHandler<AddTaskCommand>, ICommandHandler<UpdateTaskStatusCommand>, ICommandHandler<DeleteTaskCommand>, ICommandHandler<ICommand>
 {
     private readonly ITaskRepository _taskRepository;
 
@@ -17,17 +14,22 @@ public class TaskCommandHandler :
         _taskRepository = taskRepository;
     }
 
-    public void Handle(CreateCommand command)
+    public void Handle(AddTaskCommand command)
     {
         throw new NotImplementedException();
     }
 
-    public void Handle(UpdateStatusCommand command)
+    public void Handle(UpdateTaskStatusCommand command)
     {
         throw new NotImplementedException();
     }
 
-    public void Handle(DeleteCommand command)
+    public void Handle(DeleteTaskCommand taskCommand)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Handle(ICommand command)
     {
         throw new NotImplementedException();
     }

@@ -1,3 +1,5 @@
+using TaskManager.Task;
+
 namespace TaskManager.Input;
 
 public interface IInputParser<in T, out TO>
@@ -5,16 +7,16 @@ public interface IInputParser<in T, out TO>
     TO Parse(T input);
 } 
 
-public class InputParser : IInputParser<String[], IInput>
+public class InputParser : IInputParser<String[], object>
 {
-    private readonly Dictionary<String, IInputParser<String[], IInput>> _inputParsers = new()
+    private readonly Dictionary<String, IInputParser<String[], object>> _inputParsers = new()
         {
             {"add", new AddTaskInputParser()},
             {"update", new UpdateTaskInputParser()},
             {"remove", new RemoveTaskInputParser()},
             {"list", new ListTaskInputParser()}
         };
-    public IInput Parse(string[] input)
+    public object Parse(string[] input)
     {
         if (!_inputParsers.ContainsKey(input[0]))
         {
@@ -25,11 +27,11 @@ public class InputParser : IInputParser<String[], IInput>
     }
 }
 
-public class AddTaskInputParser : IInputParser<String[], AddTaskInput>
+public class AddTaskInputParser : IInputParser<String[], AddTaskCommand>
 {
     private static readonly String _descriptionFlag = "-c";
     private static readonly String _dueDateFlag = "-d:";
-    public AddTaskInput Parse(string[] input)
+    public AddTaskCommand Parse(string[] input)
     {
         var description = "";
         string? dueDate = null;
@@ -49,28 +51,28 @@ public class AddTaskInputParser : IInputParser<String[], AddTaskInput>
                 dueDate = input[i].Substring(_dueDateFlag.Length);
             }
         }
-        return new AddTaskInput(description, dueDate);
+        return new AddTaskCommand(description, dueDate);
     }
 }
 
-public class RemoveTaskInputParser : IInputParser<String[], RemoveTaskInput>
+public class RemoveTaskInputParser : IInputParser<String[], DeleteTaskCommand>
 {
-    public RemoveTaskInput Parse(string[] input)
+    public DeleteTaskCommand Parse(string[] input)
     {
         if (input.Length != 1)
         {
             throw new InvalidRemoveInputArgumentException("Invalid remove input");
         }
-        return new RemoveTaskInput(input[0]);
+        return new DeleteTaskCommand(input[0]);
     }
 }
 
 
-public class UpdateTaskInputParser : IInputParser<String[], UpdateTaskInput>
+public class UpdateTaskInputParser : IInputParser<String[], UpdateTaskStatusCommand>
 {
     private static readonly String _statusFlag = "-s";
     private static readonly String _dueDateFlag = "-d";
-    public UpdateTaskInput Parse(string[] input)
+    public UpdateTaskStatusCommand Parse(string[] input)
     {
         var id = input[0];
         String? status = null;
@@ -90,23 +92,23 @@ public class UpdateTaskInputParser : IInputParser<String[], UpdateTaskInput>
         {
             throw new InvalidUpdateInputArgumentException("Nothing to update. Please use -s or -d flag");
         }
-        return new UpdateTaskInput(id, status, dueDate);
+        return new UpdateTaskStatusCommand(id, status);
     }
 }
 
-public class ListTaskInputParser : IInputParser<String[], ListTasksInput>
+public class ListTaskInputParser : IInputParser<String[], IQuery>
 {
     private static readonly String _statusFlag = "-s";
-    public ListTasksInput Parse(string[] input)
+    public IQuery Parse(string[] input)
     {
         if (input.Length == 0)
         {
-            return new ListTasksInput(null);
+            return new ListAllTasksOrderedByDueDateQuery();
         }
 
         if (input.Length == 1 && input[0].StartsWith(_statusFlag))
         {
-            return new ListTasksInput(input[0].Substring(_statusFlag.Length));
+            return new ListTasksByStatusQuery(input[0].Substring(_statusFlag.Length));
         }
         throw new InvalidInputArgumentException("Invalid input. Please use -s flag to filter by status");
     }

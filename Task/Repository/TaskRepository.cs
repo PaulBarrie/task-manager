@@ -16,7 +16,6 @@ public interface ITaskRepository
 public class JsonFsTaskRepository : ITaskRepository {
     
     private readonly ILocalFileInfrastructure<String> _localFileInfrastructure;
-    private readonly string _taskFileName = $"Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)/.consoleagenda/data.json";
 
     public JsonFsTaskRepository(ILocalFileInfrastructure<String> localFileInfrastructure)
     {

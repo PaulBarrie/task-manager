@@ -6,8 +6,7 @@ public interface ITaskUseCases
     Task AddSubTaskToTask(Task task, Task subTask);
     Task UpdateExistingTaskFrom(Task task);
     Task RemoveTaskFromList(Task task);
-    List<Task> ListTasksByStatus(TaskStatus? status = null);
-    List<Task> listAllTasksByDueDate();
+    List<Task> ListTasks(TaskStatus? status = null);
 }
 
 
@@ -32,17 +31,17 @@ public class TaskUseCases : ITaskUseCases
         throw new NotImplementedException();
     }
 
-    public List<Task> ListTasksByStatus(TaskStatus? status = null)
+    public List<Task> ListTasks(TaskStatus? status = null)
     {
         throw new NotImplementedException();
     }
-
-    public List<Task> listAllTasksByDueDate()
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public Task RemoveTaskFromList(Task task)
+    {
+        throw new NotImplementedException();
+    }
+
+    public List<Task> ListTasksByStatus(TaskStatus? status = null)
     {
         throw new NotImplementedException();
     }
@@ -52,3 +51,4 @@ public class TaskUseCases : ITaskUseCases
         throw new NotImplementedException();
     }
 }
+

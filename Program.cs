@@ -1,4 +1,4 @@
-namespace task_manager;
+namespace TaskManager;
 
 static class Program {
     public static void Main(string[] args) {

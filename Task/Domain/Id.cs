@@ -1,6 +1,6 @@
 using System.Dynamic;
 
-namespace task_manager.Task;
+namespace TaskManager.Task;
 
 using System;
 using System.Linq;
@@ -9,7 +9,7 @@ public class Id
 {
     private static int _defaultIdSize = 10;
     private static readonly Random Random = new();
-    private readonly string _value;
+    private readonly String _value;
     
     public Id(int? size = null)
     {
@@ -19,6 +19,10 @@ public class Id
             .Select(s => s[Random.Next(s.Length)]).ToArray());
     }
 
+    public Id(String value)
+    {
+        value = value.Trim();
+    }
     public string Get()
     {
         return _value;

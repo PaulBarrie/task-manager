@@ -1,4 +1,4 @@
-namespace task_manager.Task;
+namespace TaskManager.Task;
 
 public class Task {
 
@@ -10,13 +10,7 @@ public class Task {
     public string Description { get; set; }
     public TaskState State { get; set; }
     public List<Task> SubTasks { get; set; }
-
-    static string GenerateRandomId()
-    {
-        Guid guid = Guid.NewGuid();
-        string randomId = guid.ToString();
-        return randomId;
-    }
+    
 
     public Task(string description) {
         Id = new Id();
@@ -26,6 +20,15 @@ public class Task {
         SubTasks = new List<Task>();
     }
 
+    public Task(Id id, String description, DateTimeOffset created, DateTimeOffset? dueDate, TaskState taskState, List<Task> subTasks)
+    {
+        Id = id;
+        Description = description;
+        Created = created;
+        DueDate = dueDate;
+        State = taskState;
+        SubTasks = subTasks;
+    }
 }
 
 public enum TaskState {

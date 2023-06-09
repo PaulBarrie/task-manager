@@ -1,12 +1,13 @@
 using System.Text.Json;
-using task_manager.Kernel;
-namespace task_manager.Task;
+using TaskManager.Kernel;
+
+namespace TaskManager.Task;
 
 public interface ITaskRepository
 {
     Task? Find(Id idTask);
     List<Task> FindAll(SearchFilter filter);
-    void Add(Task task);
+    void Create(Task task);
     void Remove(Id idTask);
     void Update(Id idTask, TaskState newState);
 
@@ -14,31 +15,29 @@ public interface ITaskRepository
 
 public class JsonFsTaskRepository : ITaskRepository {
     
-    private readonly ILocalFileInfrastructure<string, string> _localFileInfrastructure;
+    private readonly ILocalFileInfrastructure<String> _localFileInfrastructure;
     private readonly string _taskFileName = $"Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)/.consoleagenda/data.json";
 
-    public JsonFsTaskRepository(ILocalFileInfrastructure<string, string> localFileInfrastructure, String? taskFileName)
+    public JsonFsTaskRepository(ILocalFileInfrastructure<String> localFileInfrastructure)
     {
         _localFileInfrastructure = localFileInfrastructure;
-        if (taskFileName != null) {
-            _taskFileName = taskFileName!;
-        }
     }
 
     private List<Task> _getStoredTasks()
     {
-        var file = _localFileInfrastructure.Read(_taskFileName);
-        List<Task>? tasks = JsonSerializer.Deserialize<List<Task>>(file);
+        var file = _localFileInfrastructure.Read();
+        List<TaskDto>? tasks = JsonSerializer.Deserialize<List<TaskDto>>(file);
         if (tasks == null) {
             throw new InvalidDBException("Task file is not at JSON format");
         }
-        return tasks!;
+        return tasks.Select(dto => dto.ToTask()).ToList();
     }
     
     private void _storeTasks(List<Task> tasks)
     {
-        var serializedTasks = JsonSerializer.Serialize(tasks);
-        _localFileInfrastructure.Write(_taskFileName, serializedTasks);
+        var dtoTasks = tasks.Select(TaskDto.FromTask).ToList();
+        var serializedTasks = JsonSerializer.Serialize(dtoTasks);
+        _localFileInfrastructure.Write(serializedTasks);
     }
 
     public Task Find(Id idTask)
@@ -57,7 +56,7 @@ public class JsonFsTaskRepository : ITaskRepository {
         return tasks!.FindAll(task => task.State == filter.State);
     }
 
-    public void Add(Task task)
+    public void Create(Task task)
     {
         var tasks = _getStoredTasks();
         tasks.Add(task);

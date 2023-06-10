@@ -21,4 +21,13 @@
     <Folder Include=".assets\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Tests\bin\resources\mock.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Tests\resources\mock.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

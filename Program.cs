@@ -18,7 +18,7 @@ static class Program {
     {
         try
         {
-            args = new string[] {"update", "DvXrUURNAi", "-s:done"};
+            //args = new string[] {"update", "DvXrUURNAi", "-s:done"};
             args = new string[] {"remove", "5WuW7nhVj0"};
             //args = new string[] {"add", "-pid:T7KYo7UkaD", "-c", "sub test for Luigi and Sonia"};
             //args = new[] {"list"};

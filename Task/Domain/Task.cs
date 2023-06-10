@@ -37,7 +37,7 @@ public class Task {
         Created = created;
         DueDate = dueDate;
         State = taskState;
-        SubTasks = subTasks;
+        SubTasks =  subTasks;
     }
     public Task? FindTaskById(Id id)
     {

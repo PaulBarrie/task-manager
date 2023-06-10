@@ -20,6 +20,14 @@ public class AddTaskCommand : ICommand
         Description = description;
         DueDate = dueDate;
     }
+
+    public AddTaskCommand(Id id, String description, String? dueDate, String? parentTaskId)
+    {
+        Id = id;
+        ParentTaskId = parentTaskId;
+        Description = description;
+        DueDate = dueDate;
+    }
 }
 
 

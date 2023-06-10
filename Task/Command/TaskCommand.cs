@@ -28,9 +28,8 @@ public class UpdateTaskCommand : ICommand
     public Id Id { get; }
     public readonly TaskState? Status;
     public readonly DateTimeOffset? DueDate;
-    public readonly String? ParentIds;
 
-    public UpdateTaskCommand(string id, String? parentId, string? status, string? dueDate)
+    public UpdateTaskCommand(string id, string? status, string? dueDate)
     {
         Id = new Id(id);
         if (dueDate is not null) DueDate = DateTimeOffset.Parse(dueDate);
@@ -42,7 +41,6 @@ public class UpdateTaskCommand : ICommand
         {
             throw new InvalidTaskStatusException(status);
         }
-        ParentIds = parentId;
     }
 
 }

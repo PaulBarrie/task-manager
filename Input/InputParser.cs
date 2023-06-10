@@ -90,13 +90,9 @@ public class UpdateTaskInputParser : IInputParser<String[], UpdateTaskCommand>
             } else if (entry.StartsWith(FlagsInput.DueDateFlag))
             {
                 dueDate = entry.Substring(FlagsInput.DueDateFlag.Length);
-            } else if (entry.StartsWith(FlagsInput.ParentTaskIdFlag))
-            {
-                var parentsId =  entry.Substring(FlagsInput.ParentTaskIdFlag.Length);
-
             }
         }
-        return new UpdateTaskCommand(id, parentId, status, dueDate);
+        return new UpdateTaskCommand(id, status, dueDate);
     }
 }
 

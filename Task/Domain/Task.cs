@@ -79,13 +79,13 @@ public class Task {
         {
             return;
         }
-        var newSubTasks = SubTasks;
         foreach (var subTask in SubTasks)
         {
             var task = subTask.FindTaskById(id);
             if (task is not null)
             {
                 SubTasks.Remove(task);
+                return;
             }
         }
     }

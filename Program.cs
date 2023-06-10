@@ -19,9 +19,10 @@ static class Program {
         try
         {
             //args = new string[] {"update", "T7KYo7UkaD", "-s:done"};
-            args = new string[] {"remove", "E1awPJ7vgn"};
+            args = new string[] {"remove", "1HXOppZbx2"};
+           // args = new string[] {"add", "-pid:T7KYo7UkaD", "-c", "tettstst"};
             //args = new[] {"list"};
-            //args = new[] {"update", "E1awPJ7vgn", "-dd:2021-10-10"};
+            //args = new[] {"update", "1HXOppZbx2", "-s:closed"};
             
             var commandQuery = InputParser.Parse(args);
             TaskDispatcher.Dispatch(commandQuery);

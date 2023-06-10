@@ -5,7 +5,7 @@ public interface ICommandHandler<in T> where T : class, ICommand
     void Handle(T command);
 }
 
-public class TaskCommandHandler : ICommandHandler<AddTaskCommand>, ICommandHandler<UpdateTaskStatusCommand>, ICommandHandler<DeleteTaskCommand>, ICommandHandler<ICommand>
+public class TaskCommandHandler : ICommandHandler<AddTaskCommand>, ICommandHandler<UpdateTaskCommand>, ICommandHandler<DeleteTaskCommand>, ICommandHandler<ICommand>
 {
     private readonly ITaskRepository _taskRepository;
 
@@ -17,23 +17,36 @@ public class TaskCommandHandler : ICommandHandler<AddTaskCommand>, ICommandHandl
     public void Handle(AddTaskCommand command)
     {
         var task = command.DueDate is null ? new Task(command.Description) : new Task(command.Description, command.DueDate);
-        _taskRepository.Create(task);
+        if (command.ParentTaskId == null)
+        {
+            _taskRepository.Create(task);
+        }
+        else
+        {
+            var parentId = new Id(command.ParentTaskId);
+            var parentTask = _taskRepository.Find(parentId);
+            parentTask.SubTasks.Add(task);
+            _taskRepository.Update(parentId, parentTask);
+        }
         command.Id = task.Id;
     }
 
-    public void Handle(UpdateTaskStatusCommand command)
+    public void Handle(UpdateTaskCommand command)
     {
-        var task = _taskRepository.Update(command.Id, command.Status);
-        
+        var task = _taskRepository.Find(command.Id);
+        if (command.DueDate is not null) task.DueDate = command.DueDate.Value;
+        if (command.Status is not null) task.State = command.Status.Value;
+        _taskRepository.Update(task.Id, task);
     }
 
-    public void Handle(DeleteTaskCommand taskCommand)
+    public void Handle(DeleteTaskCommand command)
     {
-        throw new NotImplementedException();
+        _taskRepository.Remove(command.Id);
     }
 
     public void Handle(ICommand command)
     {
-        throw new NotImplementedException();
+        dynamic specificCommand = command;
+        Handle(specificCommand);
     }
 }

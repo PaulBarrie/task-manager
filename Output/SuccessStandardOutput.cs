@@ -28,23 +28,18 @@ public class SuccessStandardOutput :
     
     private void Render(AddTaskCommand output)
     {
-        Console.WriteLine($"Task with Id {output.Id} successfully added");
+        Console.WriteLine($"Task with Id {output.Id.Get()} successfully added");
         
     }
 
-    private void Render(UpdateTaskStatusCommand output)
+    private void Render(UpdateTaskCommand output)
     {
-        Console.WriteLine($"Task with id {output.Id} successfully updated");
+        Console.WriteLine($"Task with id {output.Id.Get()} successfully updated");
     }
 
     private void Render(DeleteTaskCommand output)
     {
-        Console.WriteLine($"Task with id {output.Id} successfully deleted");
-    }
-
-    public void Render(GetTaskByIdQuery output)
-    {
-        renderTask(output.Result!);
+        Console.WriteLine($"Task with id {output.Id.Get()} successfully deleted");
     }
 
     private void Render(ListTasksByStatusQuery output)
@@ -67,7 +62,7 @@ public class SuccessStandardOutput :
     
     private static void renderTask(Task.Task task)
     {
-        Console.WriteLine($"Status: {task.State} | Description: {task.Description} | DueDate: {task.DueDate}");
+        Console.WriteLine($"Id: {task.Id.Get()} | Status: {task.State} | Description: {task.Description} | DueDate: {task.DueDate}");
         if(task.SubTasks.Count == 0) return;
         Console.WriteLine("-----------------------------------------");
         Console.WriteLine("Subtasks :");

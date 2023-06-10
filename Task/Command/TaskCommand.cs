@@ -1,3 +1,5 @@
+using Microsoft.VisualBasic;
+
 namespace TaskManager.Task;
 
 public interface ICommand
@@ -10,31 +12,44 @@ public class AddTaskCommand : ICommand
     public Id Id { get; set; }
     public readonly String Description;
     public readonly String? DueDate;
+    public readonly String? ParentTaskId;
 
-    public AddTaskCommand(String description, String? dueDate)
+    public AddTaskCommand(String description, String? dueDate, String? parentTaskId)
     {
+        ParentTaskId = parentTaskId;
         Description = description;
         DueDate = dueDate;
     }
-
 }
 
-public class UpdateTaskStatusCommand : ICommand
+
+public class UpdateTaskCommand : ICommand
 {
     public Id Id { get; }
-    public readonly TaskStatus Status;
+    public readonly TaskState? Status;
+    public readonly DateTimeOffset? DueDate;
+    public readonly String? ParentIds;
 
-    public UpdateTaskStatusCommand(string id, string status)
+    public UpdateTaskCommand(string id, String? parentId, string? status, string? dueDate)
     {
         Id = new Id(id);
-        Status = (TaskStatus)Enum.Parse(typeof(TaskStatus), status);
+        if (dueDate is not null) DueDate = DateTimeOffset.Parse(dueDate);
+        if (status is null) return;
+        try
+        {
+            Status = (TaskState)Enum.Parse(typeof(TaskState), status, ignoreCase: true);
+        } catch (ArgumentException)
+        {
+            throw new InvalidTaskStatusException(status);
+        }
+        ParentIds = parentId;
     }
 
 }
 
 public class DeleteTaskCommand : ICommand
 {
-    public DeleteTaskCommand(string id)
+    public DeleteTaskCommand(String id)
     {
         Id = new Id(id);
     }

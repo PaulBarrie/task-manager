@@ -1,3 +1,4 @@
+using TaskManager.Infrastructure;
 using TaskManager.Input;
 using TaskManager.Output;
 using TaskManager.Task;
@@ -5,27 +6,32 @@ using TaskManager.Task;
 namespace TaskManager;
 
 static class Program {
-    private static readonly string TaskFileName = $"Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)/.consoleagenda/data.json";
-    private static readonly string LogFileName = $"Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)/.consoleagenda/log.txt";
+    private static readonly string UserHomePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    private static readonly string TaskFileName = Path.Combine(UserHomePath, ".consoleagenda/data.json");
+    private static readonly string LogFileName = Path.Combine(UserHomePath, ".consoleagenda/log.txt");
     
     private static readonly IInputParser<string[], object> InputParser = new InputParser();
-    private static readonly ITaskRepository _taskRepository = new JsonFsTaskRepository(new LocalFileInfrastructure(TaskFileName));
-    private static readonly TaskDispatcher _taskDispatcher = new(new TaskCommandHandler(_taskRepository), new TaskQueryHandler(_taskRepository));
-    private static readonly OutputPorts _outputPorts = new(LogFileName);
+    private static readonly ITaskRepository TaskRepository = new JsonFsTaskRepository(new LocalFileInfrastructure(TaskFileName));
+    private static readonly TaskDispatcher TaskDispatcher = new(new TaskCommandHandler(TaskRepository), new TaskQueryHandler(TaskRepository));
+    private static readonly OutputPorts OutputPorts = new(LogFileName);
     public static void Main(string[] args)
     {
         try
         {
+            //args = new string[] {"update", "T7KYo7UkaD", "-s:done"};
+            args = new string[] {"remove", "E1awPJ7vgn"};
+            //args = new[] {"list"};
+            //args = new[] {"update", "E1awPJ7vgn", "-dd:2021-10-10"};
+            
             var commandQuery = InputParser.Parse(args);
-            _taskDispatcher.Dispatch(commandQuery);
-            _outputPorts.SuccessLoggerOutput.Render(args);
-            _outputPorts.SuccessStandardOutput.Render(commandQuery);
-                
+            TaskDispatcher.Dispatch(commandQuery);
+            OutputPorts.SuccessLoggerOutput.Render(args);
+            OutputPorts.SuccessStandardOutput.Render(commandQuery);
         }
         catch (Exception e)
         {
-          _outputPorts.ErrorLoggerOutput.Render(new ErrorOutput(e.Message, args)); 
-          _outputPorts.ErrorStandardOutput.Render(e.Message);
+          OutputPorts.ErrorLoggerOutput.Render(new ErrorOutput(e.Message, args)); 
+          OutputPorts.ErrorStandardOutput.Render(e.Message);
         }
     }
 }

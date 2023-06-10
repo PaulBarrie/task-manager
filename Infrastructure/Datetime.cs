@@ -1,11 +1,10 @@
-using static System.DateTime;
 
 namespace TaskManager.Infrastructure;
 
 public class Datetime
 {
-    private static String _defaultDateTimeFormat = "yyyy-MM-dd HHhmm,ss";
-    private String _format = _defaultDateTimeFormat;
+    private const String DefaultDateTimeFormat = "yyyy-MM-dd:HH'h'mm,ss";
+    private readonly String _format = DefaultDateTimeFormat;
     
     public Datetime(String? format)
     {

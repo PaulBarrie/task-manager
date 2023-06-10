@@ -15,6 +15,6 @@ public class SuccessLoggerOutput : IOutputPort<string[]>
 
     public void Render(string[] output)
     {
-        _localFileInfrastructure.WriteLine($"[ok+][{_timer.Now()}]{String.Join(" ", output)}");
+        _localFileInfrastructure.WriteLine($"[ok+][{_timer.Now()}] {String.Join(" ", output)}");
     }
 }

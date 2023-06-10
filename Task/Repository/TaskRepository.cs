@@ -1,20 +1,22 @@
 using System.Text.Json;
-using TaskManager.Kernel;
+using TaskManager.Infrastructure;
 
 namespace TaskManager.Task;
 
 public interface ITaskRepository
 {
-    Task? Find(Id idTask);
-    List<Task> FindAll(SearchFilter filter);
+    Task Find(Id idTask);
+    List<Task> FindByState(TaskState state);
+    List<Task> FindAll();
     void Create(Task task);
     void Remove(Id idTask);
-    void Update(Id idTask, TaskState newState);
+    void Update(Id idTask, Task newTask);
 
 }
 
-public class JsonFsTaskRepository : ITaskRepository {
-    
+public class JsonFsTaskRepository : ITaskRepository
+{
+
     private readonly ILocalFileInfrastructure<String> _localFileInfrastructure;
 
     public JsonFsTaskRepository(ILocalFileInfrastructure<String> localFileInfrastructure)
@@ -26,12 +28,14 @@ public class JsonFsTaskRepository : ITaskRepository {
     {
         var file = _localFileInfrastructure.Read();
         List<TaskDto>? tasks = JsonSerializer.Deserialize<List<TaskDto>>(file);
-        if (tasks == null) {
-            throw new InvalidDBException("Task file is not at JSON format");
+        if (tasks == null)
+        {
+            throw new InvalidDbException("Task file is not at JSON format");
         }
+
         return tasks.Select(dto => dto.ToTask()).ToList();
     }
-    
+
     private void _storeTasks(List<Task> tasks)
     {
         var dtoTasks = tasks.Select(TaskDto.FromTask).ToList();
@@ -42,17 +46,26 @@ public class JsonFsTaskRepository : ITaskRepository {
     public Task Find(Id idTask)
     {
         var tasks = _getStoredTasks();
-        var foundTask = tasks!.Find(task => task.Id == idTask);
-        if (foundTask == null) {
-            throw new TaskNotFoundException($"Task with id {idTask.Get()} not found");
+        foreach (var task in tasks)
+        {
+            var foundTask = task.FindTaskById(idTask);
+            if (foundTask != null) return foundTask;
         }
-        return foundTask;
+
+        throw new TaskNotFoundException($"Task with id {idTask.Get()} not found");
     }
 
-    public List<Task> FindAll(SearchFilter filter)
+    public List<Task> FindByState(TaskState state)
     {
         var tasks = _getStoredTasks();
-        return tasks!.FindAll(task => task.State == filter.State);
+        return tasks!.FindAll(task => task.State == state);
+    }
+
+
+    public List<Task> FindAll()
+    {
+        var tasks = _getStoredTasks();
+        return tasks.OrderBy(task => task.DueDate).ToList();
     }
 
     public void Create(Task task)
@@ -65,21 +78,35 @@ public class JsonFsTaskRepository : ITaskRepository {
     public void Remove(Id idTask)
     {
         var tasks = _getStoredTasks();
-        var newTasks = tasks.Where(task => task.Id.Get() != idTask.Get());
-        _storeTasks(newTasks.ToList());
+        for(int i=0; i < tasks.Count; i++)
+        {
+            if (tasks[i].Id.Get() == idTask.Get()) {
+                var newTasks = tasks.Where(taskI => taskI.Id.Get() != idTask.Get()).ToList();
+                newTasks.Add(tasks[i]);
+                _storeTasks(newTasks);
+                return;
+            }
+            tasks[i].DeleteSubTask(idTask);
+        }
+        _storeTasks(tasks);
     }
 
-    public void Update(Id idTask, TaskState newState)
+    public void Update(Id idTask, Task newTask)
     {
         var tasks = _getStoredTasks();
-        foreach (var t in tasks)
+        for (int i = 0; i < tasks.Count; i++)
         {
-            if (t.Id.Get() != idTask.Get()) continue;
-            t.State = newState;
-            _storeTasks(tasks);
-            return;
+            if (tasks[i].Id.Get() == idTask.Get())
+            {
+                tasks[i] = newTask;
+                _storeTasks(tasks);
+                return;
+            }
+
+            tasks[i].UpdateSubTask(idTask, newTask);
         }
-        throw new TaskNotFoundException($"Task with id {idTask.Get()} not found");
+
+        _storeTasks(tasks);
     }
 }
 

@@ -4,27 +4,15 @@ namespace TaskManager.Task;
 public interface IQuery
 {
 }
-public class GetTaskByIdQuery : IQuery
-{
-    public readonly string Id;
-    public Task? Result;
-
-    public GetTaskByIdQuery(string id)
-    {
-        Id = id;
-        Result = null;
-    }
-}
-
 public class ListTasksByStatusQuery : IQuery
 {
-    public readonly TaskStatus Status;
-    public List<Task> Results = new List<Task>();
+    public readonly TaskState Status;
+    public List<Task> Results = new();
     public ListTasksByStatusQuery(String status)
     {
         try
         {
-            Status = (TaskStatus)Enum.Parse(typeof(TaskStatus), status);
+            Status = (TaskState)Enum.Parse(typeof(TaskState), status, ignoreCase: true);
         } catch (ArgumentException)
         {
             throw new InvalidTaskStatusException(status);

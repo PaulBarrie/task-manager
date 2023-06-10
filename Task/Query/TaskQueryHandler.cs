@@ -6,7 +6,7 @@ public interface IQueryHandler<in T> where T : class, IQuery
     void Handle(T query);
 }
 
-public class TaskQueryHandler : IQueryHandler<GetTaskByIdQuery>, IQueryHandler<ListTasksByStatusQuery>, IQueryHandler<ListAllTasksOrderedByDueDateQuery>, IQueryHandler<IQuery>
+public class TaskQueryHandler : IQueryHandler<ListTasksByStatusQuery>, IQueryHandler<ListAllTasksOrderedByDueDateQuery>, IQueryHandler<IQuery>
 {
     
     private readonly ITaskRepository _taskRepository;
@@ -15,24 +15,21 @@ public class TaskQueryHandler : IQueryHandler<GetTaskByIdQuery>, IQueryHandler<L
     {
         _taskRepository = taskRepository;
     }
-
-    public void Handle(GetTaskByIdQuery query)
-    {
-        throw new NotImplementedException();
-    }
+    
 
     public void Handle(ListTasksByStatusQuery query)
     {
-        throw new NotImplementedException();
+        query.Results = _taskRepository.FindByState(query.Status);
     }
 
     public void Handle(ListAllTasksOrderedByDueDateQuery query)
     {
-        throw new NotImplementedException();
+        query.Results = _taskRepository.FindAll();
     }
 
     public void Handle(IQuery query)
     {
-        throw new NotImplementedException();
+        dynamic specificQuery = query;
+        Handle(specificQuery);
     }
 }

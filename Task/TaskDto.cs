@@ -35,7 +35,7 @@ public class TaskDto
 
     public Task ToTask()
     {
-        var subTasks = SubTasks != null ? SubTasks.Select(subTask => subTask.ToTask()).ToList() : new List<Task>();
+        var subTasks = SubTasks.Select(subTask => subTask.ToTask()).ToList();
         return new Task(
             new Id(Id),
             Description,

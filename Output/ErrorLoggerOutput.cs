@@ -16,7 +16,7 @@ public class ErrorLoggerOutput : IOutputPort<ErrorOutput>
 
     public void Render(ErrorOutput output)
     {
-        _localFileInfrastructure.WriteLine($"[error][${_timer.Now()}]{String.Join(" ", output.Command)}:{output.ErrorMessage}");
+        _localFileInfrastructure.WriteLine($"[error][${_timer.Now()}] {String.Join(" ", output.Command)}: {output.ErrorMessage}");
     }
 }
 

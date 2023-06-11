@@ -18,12 +18,6 @@ static class Program {
     {
         try
         {
-            //args = new string[] {"update", "DvXrUURNAi", "-s:done"};
-            args = new string[] {"remove", "5WuW7nhVj0"};
-            //args = new string[] {"add", "-pid:T7KYo7UkaD", "-c", "sub test for Luigi and Sonia"};
-            //args = new[] {"list"};
-            //args = new[] {"update", "DvXrUURNAi", "-d:2032-04-06"};
-            
             var commandQuery = InputParser.Parse(args);
             TaskDispatcher.Dispatch(commandQuery);
             OutputPorts.SuccessLoggerOutput.Render(args);

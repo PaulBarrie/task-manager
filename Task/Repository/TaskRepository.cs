@@ -28,7 +28,7 @@ public class JsonFsTaskRepository : ITaskRepository
     private List<Task> _getStoredTasks()
     {
         var file = _localFileInfrastructure.Read();
-        List<TaskDto>? tasks = JsonSerializer.Deserialize<List<TaskDto>>(file);
+        List<TaskData>? tasks = JsonSerializer.Deserialize<List<TaskData>>(file);
         if (tasks == null)
         {
             throw new InvalidDbException("Task file is not at JSON format");
@@ -39,7 +39,7 @@ public class JsonFsTaskRepository : ITaskRepository
 
     private void _storeTasks(List<Task> tasks)
     {
-        var dtoTasks = tasks.Select(TaskDto.FromTask).ToList();
+        var dtoTasks = tasks.Select(TaskData.FromTask).ToList();
         var serializedTasks = JsonSerializer.Serialize(dtoTasks);
         _localFileInfrastructure.Write(serializedTasks);
     }

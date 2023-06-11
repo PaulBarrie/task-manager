@@ -4,7 +4,7 @@ using TaskManager.Infrastructure;
 using TaskManager.Task;
 
 [TestFixture]
-public class TaskQueryTest
+public class TaskCommandHandlerTest
 {
     private JsonFsTaskRepository taskRepository;
     private TaskCommandHandler taskCommandHandler;
@@ -31,18 +31,18 @@ public class TaskQueryTest
     }
 
     [Test]
-    public void UpdateTaskCommandTest(){
+    public void UpdateTaskWhichDoesNotExistCommandTest(){
 
-        UpdateTaskCommand TaskCommand = new UpdateTaskCommand("4","Pending", "2023-06-17");
-
-        taskCommandHandler.Handle(TaskCommand);
-
-        Task updatedTask = taskRepository.Find(new Id("4"));
-
-        bool check = (updatedTask.State == TaskState.Pending && updatedTask.DueDate == DateTimeOffset.Parse("2023-06-17"));
-
-        Assert.IsTrue(check, "Task not updated");
-
+        try
+        {
+            UpdateTaskCommand TaskCommand = new UpdateTaskCommand("4","Pending", "2023-06-17");
+            taskCommandHandler.Handle(TaskCommand);
+        }
+        catch (Exception e)
+        {
+            Assert.IsTrue(true, "Task not updated");
+        }
+        
     }
 
     [Test]

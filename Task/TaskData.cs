@@ -1,16 +1,16 @@
 namespace TaskManager.Task;
 
-public class TaskDto
+public class TaskData
 {
     public string Id { get; set; }
     public DateTimeOffset Created { get; set; }
     public  DateTimeOffset? DueDate { get; set; }
     public String Description { get; set; }
     public TaskState State { get; set; }
-    public List<TaskDto> SubTasks  { get; set; }
+    public List<TaskData> SubTasks  { get; set; }
 
 
-    public TaskDto(String id, DateTimeOffset created, DateTimeOffset? dueDate, string description, TaskState state, List<TaskDto> subTasks)
+    public TaskData(String id, DateTimeOffset created, DateTimeOffset? dueDate, string description, TaskState state, List<TaskData> subTasks)
     {
         Id = id;
         Created = created;
@@ -20,9 +20,9 @@ public class TaskDto
         SubTasks = subTasks;
     }
 
-    public static TaskDto FromTask(Task task)
+    public static TaskData FromTask(Task task)
     {
-        TaskDto dto = new(
+        TaskData data = new(
             task.Id.Get(),
             task.Created,
             task.DueDate,
@@ -30,7 +30,7 @@ public class TaskDto
             task.State,
             task.SubTasks.Select(FromTask).ToList()
         );
-        return dto;
+        return data;
     }
 
     public Task ToTask()

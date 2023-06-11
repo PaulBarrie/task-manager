@@ -18,16 +18,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include=".assets\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Tests\bin\resources\mock.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Tests\resources\mock.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include=".assets\architecture.png" />
+    <None Include=".assets\core_functions.png" />
   </ItemGroup>
 
 </Project>

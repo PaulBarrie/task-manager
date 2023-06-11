@@ -9,7 +9,7 @@ public class Id
 {
     private static int _defaultIdSize = 10;
     private static readonly Random Random = new();
-    private readonly String _value;
+    public readonly String _value ;
     private List<String> _parentIds;
 
     public Id(int? size = null)
